@@ -1,0 +1,61 @@
+﻿@model FinSys2.Models.User
+@{
+    ViewData["Title"] = "Настройки профиля";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 fw-bold text-primary">Настройки профиля</h2>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card p-4 shadow-sm border-0 text-center">
+                <img src="@Model.AvatarPath" alt="Avatar" class="rounded-circle mb-3 mx-auto shadow" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #87CEEB;" />
+                
+                <form asp-action="UploadAvatar" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input class="form-control form-control-sm" type="file" name="uploadedFile" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary btn-sm w-100">Обновить фото</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card p-4 shadow-sm border-0 mb-4">
+                <h5 class="fw-bold mb-3">Личные данные</h5>
+                <form asp-action="UpdateProfile" method="post">
+                    <div class="mb-3">
+                        <label class="form-label text-muted">Email (Логин)</label>
+                        <input type="email" class="form-control" value="@Model.Email" disabled>
+                        <small class="text-muted">Email изменить нельзя.</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Имя пользователя</label>
+                        <input type="text" name="newName" class="form-control border-sky" value="@Model.FullName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Телефон</label>
+                        <input type="text" name="newPhone" class="form-control border-sky" value="@Model.Phone" placeholder="+7 (999) 000-00-00">
+                    </div>
+                    <button type="submit" class="btn btn-sky fw-bold">Сохранить данные</button>
+                </form>
+            </div>
+
+            <div class="card p-4 shadow-sm border-0">
+                <h5 class="fw-bold mb-3 text-danger">Смена пароля</h5>
+                <form asp-action="UpdatePassword" method="post">
+                    <div class="mb-3">
+                        <input type="password" name="oldPassword" class="form-control" placeholder="Текущий пароль" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" name="newPassword" class="form-control" placeholder="Новый пароль" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" name="confirmPassword" class="form-control" placeholder="Повторите новый пароль" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger fw-bold">Изменить пароль</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+[
+  {
+    "Id": "9cce0cf3-95e5-419e-af61-6defb429f051",
+    "FullName": "\u0442\u0430\u043C\u0438\u043A",
+    "Phone": "79187092440",
+    "Email": "dfvev@mail.ru",
+    "Password": "dfvdvdvdv"
+  },
+  {
+    "Id": "29633e98-ed86-4ff5-b412-69925ad718a7",
+    "FullName": "\u0442\u0430\u043C\u0438\u043A",
+    "Phone": null,
+    "Email": "sfsf@gmail.ru",
+    "Password": "1234556"
+  },
+  {
+    "Id": "b923f254-efd4-4ed7-b6fe-615bdeba88ab",
+    "FullName": "\u0442\u0430\u043C\u0438\u043A",
+    "Phone": null,
+    "Email": "tamik@mail.ru",
+    "Password": "tamik"
+  }
+]

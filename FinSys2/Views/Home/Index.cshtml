@@ -1,0 +1,205 @@
+﻿@model List<FinSys2.Models.Transaction>
+@{
+    ViewData["Title"] = "Главная";
+    bool isAuth = User.Identity.IsAuthenticated;
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-4 shadow-sm mb-4">
+            <h4 class="mb-4 text-primary">Новая запись</h4>
+            @if (isAuth)
+            {
+                <form asp-action="AddTransaction" method="post" id="transForm">
+                    <div class="mb-3">
+                        <select name="type" id="typeSelect" class="form-select border-sky" onchange="updateCategories()">
+                            <option value="Income">Доход (+)</option>
+                            <option value="Expense" selected>Расход (-)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <input type="number" step="0.01" name="amount" class="form-control border-sky" placeholder="Сумма ₽" required>
+                    </div>
+    
+                    <div class="mb-3">
+                        <select id="categorySelect" class="form-select border-sky" onchange="checkOtherCategory()">
+                        </select>
+                        <input type="hidden" name="category" id="finalCategory">
+                    </div>
+
+                    <div class="mb-3" id="customCategoryBlock" style="display:none;">
+                        <input type="text" id="customCategoryInput" class="form-control border-sky" placeholder="Назовите свою категорию">
+                        <small class="text-danger" id="validationError" style="display:none;">Такая категория уже есть в списке!</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="text" name="comment" class="form-control border-sky" placeholder="Комментарий">
+                    </div>
+                    <button type="submit" class="btn btn-sky w-100 fw-bold">Добавить</button>
+                </form>
+
+                
+                <form asp-action="ClearAllData" method="post" onsubmit="return confirm('Очистить всю историю?')" class="mt-3">
+                    <button type="submit" class="btn btn-outline-danger btn-sm w-100 border-0">🗑 Быстрая очистка истории</button>
+                </form>
+            }
+            else
+            {
+                <div class="text-center p-3">
+                    <p class="text-muted small">Войдите в аккаунт, чтобы сохранять историю и видеть графики.</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card p-3 text-center border-0" style="background: #eef9ff;">
+                    <small class="text-muted">Баланс</small>
+                    <h3 class="fw-bold text-primary mb-0">@ViewBag.Balance.ToString("N0") ₽</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 text-center border-0">
+                    <small class="text-muted text-success">Доходы</small>
+                    <h3 class="fw-bold mb-0">@ViewBag.TotalIncome.ToString("N0") ₽</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 text-center border-0">
+                    <small class="text-muted text-danger">Расходы</small>
+                    <h3 class="fw-bold mb-0">@ViewBag.TotalExpense.ToString("N0") ₽</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-4 mb-4">
+            <h6 class="text-muted mb-3">Линейная диаграмма (Динамика накоплений)</h6>
+            <canvas id="lineChart" style="max-height: 250px;"></canvas>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card p-4 mb-4 shadow-sm border-0">
+                    <h6 class="text-muted mb-3 text-center">Расходы по категориям</h6>
+                    <canvas id="expenseChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-4 mb-4 shadow-sm border-0">
+                    <h6 class="text-muted mb-3 text-center">Зачисления по категориям</h6>
+                    <canvas id="incomeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        //логика выпадающих списков категорий
+        const incomeCats = ["Зарплата", "Переводы", "Прибыль с бизнеса"];
+        const expenseCats = ["Еда", "Здоровье", "Спорт", "Кинотеатр", "Видеоигры"];
+
+        function updateCategories() {
+            const type = document.getElementById('typeSelect').value;
+            const select = document.getElementById('categorySelect');
+            const list = type === "Income" ? incomeCats : expenseCats;
+
+            select.innerHTML = '';
+            list.forEach(cat => {
+                select.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+            select.innerHTML += `<option value="Other">Другая категория...</option>`;
+            
+            checkOtherCategory();//скрываем поле ввода, если не выбрано другая категория
+        }
+
+        function checkOtherCategory() {
+            const select = document.getElementById('categorySelect');
+            const customBlock = document.getElementById('customCategoryBlock');
+            customBlock.style.display = select.value === "Other" ? "block" : "none";
+        }
+
+        //проверка
+        document.getElementById('transForm').onsubmit = function(e) {
+            const select = document.getElementById('categorySelect');
+            const customInput = document.getElementById('customCategoryInput');
+            const type = document.getElementById('typeSelect').value;
+            const list = type === "Income" ? incomeCats : expenseCats;
+            
+            let finalValue = select.value;
+
+            if (select.value === "Other") {
+                const val = customInput.value.trim();
+                if (!val) {
+                    alert("Введите название своей категории");
+                    return false;
+                }
+                //проверка на дубликат
+                if (list.some(c => c.toLowerCase() === val.toLowerCase())) {
+                    document.getElementById('validationError').style.display = 'block';
+                    return false;
+                }
+                finalValue = val;
+            }
+
+            document.getElementById('finalCategory').value = finalValue;
+        };
+
+        //иниц категорий при загрузке страницы
+        updateCategories();
+
+
+        //грфики
+        
+        //линейный график
+        new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.ChartLabels)),
+                datasets: [{
+                    label: 'Баланс',
+                    data: @Html.Raw(Json.Serialize(ViewBag.ChartValues)),
+                    borderColor: '#00BFFF',
+                    backgroundColor: 'rgba(0, 191, 255, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: { scales: { y: { beginAtZero: true } } }
+        });
+
+        const pieOptions = {
+            plugins: { legend: { position: 'bottom' } },
+            cutout: '65%'
+        };
+
+        //круговой график расходов
+        new Chart(document.getElementById('expenseChart'), {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.ExpenseLabels)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(ViewBag.ExpenseValues)),
+                    backgroundColor: ['#ff7675', '#74b9ff', '#a29bfe', '#ffeaa7', '#fab1a0', '#55efc4']
+                }]
+            },
+            options: pieOptions
+        });
+
+        //круговой график ДОХОДОВ
+        new Chart(document.getElementById('incomeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(Json.Serialize(ViewBag.IncomeLabels)),
+                datasets: [{
+                    data: @Html.Raw(Json.Serialize(ViewBag.IncomeValues)),
+                    backgroundColor: ['#2ecc71', '#27ae60', '#1abc9c', '#16a085', '#a2d9ce']
+                }]
+            },
+            options: pieOptions
+        });
+    </script>
+}

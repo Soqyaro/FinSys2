@@ -1,0 +1,23 @@
+[
+  {
+    "Id": "5125f209-6e80-4661-b43c-4ee0dff4bfe0",
+    "UserId": null,
+    "Title": "\u0430\u0439\u0444\u043E\u043D",
+    "TargetAmount": 100000,
+    "AllocatedPercentage": 16
+  },
+  {
+    "Id": "4e6aac10-5614-4f12-9e03-62d0e5110ff0",
+    "UserId": "29633e98-ed86-4ff5-b412-69925ad718a7",
+    "Title": "\u0430\u0439\u0444\u043E\u043D",
+    "TargetAmount": 500,
+    "AllocatedPercentage": 10
+  },
+  {
+    "Id": "18caf0b6-9ace-47f7-b860-2192a7a0fbfa",
+    "UserId": "b923f254-efd4-4ed7-b6fe-615bdeba88ab",
+    "Title": "\u0430\u0439\u0444\u043E\u043D",
+    "TargetAmount": 100000,
+    "AllocatedPercentage": 100
+  }
+]

@@ -1,0 +1,56 @@
+﻿@model List<FinSys2.Models.Transaction>
+
+<div class="card shadow-sm border-0 p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 style="color: #87CEEB;" class="fw-bold m-0">История операций</h2>
+        <span class="badge bg-light text-dark border">Всего записей: @Model.Count</span>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Дата</th>
+                    <th>Категория</th>
+                    <th>Тип</th>
+                    <th>Сумма</th>
+                    <th>Комментарий</th>
+                    <th class="text-end">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-muted" style="font-size: 0.9rem;">
+                            @item.Date.ToString("dd.MM.yyyy") <br>
+                            <small>@item.Date.ToString("HH:mm")</small>
+                        </td>
+                        <td class="fw-bold">@item.Category</td>
+                        <td>
+                            @if (item.Type == "Income")
+                            {
+                                <span class="badge rounded-pill bg-success-subtle text-success px-3">Доход</span>
+                            }
+                            else
+                            {
+                                <span class="badge rounded-pill bg-danger-subtle text-danger px-3">Расход</span>
+                            }
+                        </td>
+                        <td class="fw-bold @(item.Type == "Income" ? "text-success" : "text-danger")">
+                            @(item.Type == "Income" ? "+" : "-") @item.Amount.ToString("N2") ₽
+                        </td>
+                        <td class="text-muted italic" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            @item.Comment
+                        </td>
+                        <td class="text-end">
+                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Удалить эту запись?')">
+                                <button type="submit" class="btn btn-outline-danger btn-sm border-0">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
