@@ -34,14 +34,14 @@
                     <ul class="navbar-nav align-items-center">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            var avatarPath = User.FindFirst("AvatarPath")?.Value ?? "/images/default-avatar.png";
+                            var avatarPath = User.FindFirst("AvatarPath")?.Value ?? "/images/default-avatar.jpg";
 
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">
-                                    <img src="@avatarPath" class="rounded-circle shadow-sm me-2"
+                                    <span class="fw-medium">@User.Identity.Name</span>
+                                    <img src="@avatarPath" class="rounded-circle shadow-sm ms-2"
                                          style="width: 32px; height: 32px; object-fit: cover; border: 1px solid rgba(255,255,255,0.3);"
                                          alt="Avatar">
-                                    <span class="fw-medium">@User.Identity.Name</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
                                     <li>
@@ -107,9 +107,9 @@
             <div class="modal-content border-0 shadow-lg">
                 <form asp-controller="Account" asp-action="Register" method="post" class="modal-body p-4">
                     <h5 class="fw-bold mb-3">Создать аккаунт</h5>
-                    <input type="text" name="FullName" class="form-control mb-2" placeholder="ФИО" required>
+                    <input type="text" name="FullName" class="form-control mb-2" placeholder="ФИО" pattern="[A-Za-z0-9]+" title="Используйте только латинские буквы" required>
                     <input type="email" name="Email" class="form-control mb-2" placeholder="Email" required>
-                    <input type="password" name="Password" class="form-control mb-3" placeholder="Пароль" required>
+                    <input type="password" name="Password" class="form-control mb-3" placeholder="Пароль" pattern="[A-Za-z0-9!@@#\$%\^\*\+\-\=\?]+" required>
                     <button type="submit" class="btn btn-sky w-100 fw-bold">Зарегистрироваться</button>
                 </form>
             </div>
