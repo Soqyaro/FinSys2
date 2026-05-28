@@ -1,23 +1,18 @@
 [
   {
-    "Id": "9cce0cf3-95e5-419e-af61-6defb429f051",
-    "FullName": "\u0442\u0430\u043C\u0438\u043A",
-    "Phone": "79187092440",
-    "Email": "dfvev@mail.ru",
-    "Password": "dfvdvdvdv"
+    "Id": "54a917fb-be23-4c41-bf5b-f990a524a35e",
+    "FullName": "new",
+    "Phone": null,
+    "Email": "new@mail.ru",
+    "Password": "new",
+    "AvatarPath": "/images/default-avatar.jpg"
   },
   {
-    "Id": "29633e98-ed86-4ff5-b412-69925ad718a7",
-    "FullName": "\u0442\u0430\u043C\u0438\u043A",
-    "Phone": null,
-    "Email": "sfsf@gmail.ru",
-    "Password": "1234556"
-  },
-  {
-    "Id": "b923f254-efd4-4ed7-b6fe-615bdeba88ab",
-    "FullName": "\u0442\u0430\u043C\u0438\u043A",
-    "Phone": null,
-    "Email": "tamik@mail.ru",
-    "Password": "tamik"
+    "Id": "692384aa-19a8-4087-b331-f7d8f2172fd8",
+    "FullName": "tttttttttttttttt",
+    "Phone": "89177092440",
+    "Email": "test@mail.ru",
+    "Password": "test",
+    "AvatarPath": "/avatars/cc154611-6dbb-4655-8586-a2dfe309be12_P1050758.jpg"
   }
 ]

@@ -1,5 +1,8 @@
+using FinSys2.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<CurrencyService>();
 builder.Services.AddControllersWithViews();
 
 //печеньки

@@ -1,14 +1,15 @@
 ﻿using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FinSys2.Services
 {
-    public class JsonDatabase<T>
+    public class JsonDatabase<T>    
     {
         private readonly string _filePath;
 
-        public JsonDatabase(string fileName)
+        public JsonDatabase(string fileName, IWebHostEnvironment env)
         {
-            string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data"); //Path.Combine(env.ContentRootPath, "Data");
+            string directoryPath = Path.Combine(env.ContentRootPath, "Data");
 
             if (!Directory.Exists(directoryPath))
             {

@@ -14,7 +14,7 @@ namespace FinSys2.Controllers
 
         public AccountController(IWebHostEnvironment appEnvironment)
         {
-            _userDb = new JsonDatabase<User>("users.json");
+            _userDb = new JsonDatabase<User>("users.json", appEnvironment);
             _appEnvironment = appEnvironment;
         }
 
