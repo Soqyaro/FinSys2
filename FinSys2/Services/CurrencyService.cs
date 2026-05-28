@@ -22,7 +22,7 @@ namespace FinSys2.Services
                 //получеине данных как массив байтов
                 var responseBytes = await client.GetByteArrayAsync(Url);
 
-                //Декодир байтов в строку, используя кодировку
+                //декодер байтов в строку, используя кодировку
                 var xmlString = Encoding.GetEncoding("windows-1251").GetString(responseBytes);
 
                 var xdoc = XDocument.Parse(xmlString);
@@ -38,7 +38,7 @@ namespace FinSys2.Services
                     if (valute != null)
                     {
                         var value = valute.Element("Value")?.Value;
-                        // ЦБ курс к красивому виду
+                        //ЦБ курс к красивому виду
                         rates.Add(code, value + " ₽");
                     }
                 }

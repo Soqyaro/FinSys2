@@ -2,12 +2,20 @@
 using FinSys2.Services;
 using FinSys2.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Hosting; //обязательно
 
 namespace FinSys2.Controllers
 {
     public class HistoryController : Controller
     {
-        private readonly JsonDatabase<Transaction> db = new JsonDatabase<Transaction>("transactions.json");
+        private readonly JsonDatabase<Transaction> _db;
+
+        // Внедряем IWebHostEnvironment через конструктор
+        public HistoryController(IWebHostEnvironment appEnvironment)
+        {
+            // Теперь передаем окружение в базу данных
+            _db = new JsonDatabase<Transaction>("transactions.json", appEnvironment);
+        }
 
         public IActionResult Index()
         {
@@ -16,8 +24,8 @@ namespace FinSys2.Controllers
             if (string.IsNullOrEmpty(userId))
                 return View(new List<Transaction>());
 
-            //самые свежие операции в начало списка
-            var items = db.GetAll()
+            // Используем наше приватное поле _db
+            var items = _db.GetAll()
                 .Where(t => t.UserId == userId)
                 .OrderByDescending(x => x.Date)
                 .ToList();
@@ -29,15 +37,14 @@ namespace FinSys2.Controllers
         public IActionResult Delete(string id)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var allItems = db.GetAll();
+            var allItems = _db.GetAll();
 
-            //Удаляем только если ifd совпал И это запись текущего пользователя
             var itemToRemove = allItems.FirstOrDefault(x => x.Id == id && x.UserId == userId);
 
             if (itemToRemove != null)
             {
                 allItems.Remove(itemToRemove);
-                db.SaveAll(allItems);
+                _db.SaveAll(allItems);
             }
 
             return RedirectToAction("Index");
