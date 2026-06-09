@@ -107,7 +107,7 @@
             <div class="modal-content border-0 shadow-lg">
                 <form asp-controller="Account" asp-action="Register" method="post" class="modal-body p-4">
                     <h5 class="fw-bold mb-3">Создать аккаунт</h5>
-                    <input type="text" name="FullName" class="form-control mb-2" placeholder="ФИО" pattern="[A-Za-z0-9]+" title="Используйте только латинские буквы" required>
+                    <input type="text" name="FullName" class="form-control mb-2" placeholder="ФИО" pattern="[A-Za-zА-Яа-яЁё0-9 ]+" title="Используйте только латинские буквы" required>
                     <input type="email" name="Email" class="form-control mb-2" placeholder="Email" required>
                     <input type="password" name="Password" class="form-control mb-3" placeholder="Пароль" pattern="[A-Za-z0-9!@@#\$%\^\*\+\-\=\?]+" required>
                     <button type="submit" class="btn btn-sky w-100 fw-bold">Зарегистрироваться</button>
