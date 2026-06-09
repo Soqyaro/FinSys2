@@ -16,7 +16,8 @@ namespace FinSys2.Controllers
             _transactionDb = new JsonDatabase<Transaction>("transactions.json", appEnvironment);
         }
 
-        public IActionResult Index()
+        // Добавляем параметры в метод (они могут быть null, если фильтр не выбран)
+        public IActionResult Index(int? month, int? year)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -34,12 +35,11 @@ namespace FinSys2.Controllers
                 return View(new List<Transaction>());
             }
 
-            //получение транзакций пользователя
             var userTransactions = _transactionDb.GetAll()
                 .Where(t => t.UserId == userId)
                 .ToList();
 
-            //общие показатели для верхних карточек
+            // 1. ОБЩИЕ ПОКАЗАТЕЛИ И ЛИНЕЙНЫЙ ГРАФИК (за всё время)
             decimal income = userTransactions.Where(t => t.Type == "Income").Sum(t => t.Amount);
             decimal expense = userTransactions.Where(t => t.Type == "Expense").Sum(t => t.Amount);
 
@@ -47,7 +47,6 @@ namespace FinSys2.Controllers
             ViewBag.TotalExpense = expense;
             ViewBag.Balance = income - expense;
 
-            //логика графика баланса
             var sortedForLine = userTransactions.OrderBy(t => t.Date).ToList();
             var labels = new List<string>();
             var values = new List<decimal>();
@@ -65,15 +64,24 @@ namespace FinSys2.Controllers
             ViewBag.ChartLabels = labels;
             ViewBag.ChartValues = values;
 
-            //расходы
-            var expenseData = userTransactions
+            // 2. ФИЛЬТРАЦИЯ ТОЛЬКО ДЛЯ КРУГОВЫХ ДИАГРАММ
+            var pieChartData = userTransactions.AsEnumerable();
+
+            if (month.HasValue && month.Value > 0)
+                pieChartData = pieChartData.Where(t => t.Date.Month == month.Value);
+
+            if (year.HasValue && year.Value > 0)
+                pieChartData = pieChartData.Where(t => t.Date.Year == year.Value);
+
+            // Расходы (с учетом фильтра)
+            var expenseData = pieChartData
                 .Where(t => t.Type == "Expense")
                 .GroupBy(t => t.Category)
                 .Select(g => new { Category = g.Key, Amount = g.Sum(t => t.Amount) })
                 .ToList();
 
-            //доходы
-            var incomeData = userTransactions
+            // Доходы (с учетом фильтра)
+            var incomeData = pieChartData
                 .Where(t => t.Type == "Income")
                 .GroupBy(t => t.Category)
                 .Select(g => new { Category = g.Key, Amount = g.Sum(t => t.Amount) })
@@ -83,6 +91,10 @@ namespace FinSys2.Controllers
             ViewBag.ExpenseValues = expenseData.Select(x => x.Amount).ToList();
             ViewBag.IncomeLabels = incomeData.Select(x => x.Category).ToList();
             ViewBag.IncomeValues = incomeData.Select(x => x.Amount).ToList();
+
+            // Сохраняем выбранные значения в ViewBag, чтобы селекты не сбрасывались
+            ViewBag.SelectedMonth = month ?? 0;
+            ViewBag.SelectedYear = year ?? 0;
 
             return View(userTransactions.OrderByDescending(t => t.Date).ToList());
         }

@@ -42,7 +42,7 @@ namespace FinSys2.Controllers
             {
                 if (!string.IsNullOrEmpty(newPhone))
                 {
-                    if (!Regex.IsMatch(newPhone, @"^\d{10,14}$"))
+                    if (!Regex.IsMatch(newPhone, @"^\d{6,14}$"))
                     {
                         return Content("<script>alert('Недопустимая длина номера телефона!'); window.location='/Account/Settings';</script>", "text/html; charset=utf-8");
                     }
@@ -124,8 +124,8 @@ namespace FinSys2.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(User model)
         {
-            if (!Regex.IsMatch(model.FullName, @"^[a-zA-Z0-9 ]+$"))
-                return Content("<script>alert('Имя должно содержать только латинские буквы!'); window.location='/';</script>", "text/html; charset=utf-8");
+            if (!Regex.IsMatch(model.FullName, @"^[a-zA-Zа-яА-ЯёЁ0-9 ]+$"))
+                return Content("<script>alert('Имя содержит недопустимые символы!'); window.location='/';</script>", "text/html; charset=utf-8");
 
             if (string.IsNullOrEmpty(model.FullName) || model.FullName.Length < 2)
                 return Content("<script>alert('Имя слишком короткое'); window.location='/';</script>", "text/html; charset=utf-8");

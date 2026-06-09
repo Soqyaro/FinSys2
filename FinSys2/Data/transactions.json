@@ -7,5 +7,68 @@
     "Category": "\u0417\u0430\u0440\u043F\u043B\u0430\u0442\u0430",
     "Comment": "",
     "Date": "2026-05-23T22:50:08.2160953+03:00"
+  },
+  {
+    "Id": "3876618a-c6bd-4115-a306-0eb4bf174d8c",
+    "UserId": "61b10c57-7170-4b2a-9496-aa02bcd85f1c",
+    "Type": "Income",
+    "Amount": 1212,
+    "Category": "\u0417\u0430\u0440\u043F\u043B\u0430\u0442\u0430",
+    "Comment": "",
+    "Date": "2026-05-28T23:57:41.5620918+03:00"
+  },
+  {
+    "Id": "da2d7d68-5caa-4b75-b9ec-9cc8d5904f00",
+    "UserId": "61b10c57-7170-4b2a-9496-aa02bcd85f1c",
+    "Type": "Income",
+    "Amount": 121212,
+    "Category": "\u0417\u0430\u0440\u043F\u043B\u0430\u0442\u0430",
+    "Comment": "2112",
+    "Date": "2026-05-28T23:58:05.7062911+03:00"
+  },
+  {
+    "Id": "d68bc38e-7be2-4ffa-a826-0a2016641224",
+    "UserId": "61b10c57-7170-4b2a-9496-aa02bcd85f1c",
+    "Type": "Income",
+    "Amount": 121212,
+    "Category": "fff",
+    "Comment": "333",
+    "Date": "2026-06-03T20:35:57.6536223+03:00"
+  },
+  {
+    "Id": "51292905-29f1-4d15-a854-1de300bee75d",
+    "UserId": "61b10c57-7170-4b2a-9496-aa02bcd85f1c",
+    "Type": "Expense",
+    "Amount": 12121212121,
+    "Category": "\u0417\u0434\u043E\u0440\u043E\u0432\u044C\u0435",
+    "Comment": "33",
+    "Date": "2026-06-03T20:36:08.4917668+03:00"
+  },
+  {
+    "Id": "0c81fb71-1c5f-45d6-ac6e-e00bdd46c52a",
+    "UserId": "61b10c57-7170-4b2a-9496-aa02bcd85f1c",
+    "Type": "Income",
+    "Amount": 121212121212,
+    "Category": "33",
+    "Comment": "33",
+    "Date": "2026-06-03T20:36:23.2195795+03:00"
+  },
+  {
+    "Id": "e6410033-e78b-461a-8a43-c2e1ab967db4",
+    "UserId": "61b10c57-7170-4b2a-9496-aa02bcd85f1c",
+    "Type": "Expense",
+    "Amount": 111111,
+    "Category": "\u0414\u043E\u0441\u0442\u0438\u0436\u0435\u043D\u0438\u0435 \u0446\u0435\u043B\u0438",
+    "Comment": "\u041F\u043E\u043A\u0443\u043F\u043A\u0430: fgfgfg",
+    "Date": "2026-06-03T20:37:02.3887637+03:00"
+  },
+  {
+    "Id": "5460cba0-4be3-489f-90b2-78294114f1eb",
+    "UserId": "61b10c57-7170-4b2a-9496-aa02bcd85f1c",
+    "Type": "Expense",
+    "Amount": 3141313,
+    "Category": "\u0421\u043F\u043E\u0440\u0442",
+    "Comment": "",
+    "Date": "2026-06-09T23:17:39.7721496+03:00"
   }
 ]

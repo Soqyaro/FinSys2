@@ -14,5 +14,13 @@
     "Email": "test@mail.ru",
     "Password": "test",
     "AvatarPath": "/avatars/cc154611-6dbb-4655-8586-a2dfe309be12_P1050758.jpg"
+  },
+  {
+    "Id": "61b10c57-7170-4b2a-9496-aa02bcd85f1c",
+    "FullName": "\u041A\u043E\u0441\u0442\u044F12",
+    "Phone": "89187092440",
+    "Email": "kastya@mail.ru",
+    "Password": "kostya",
+    "AvatarPath": "/avatars/fb4015b9-6ae5-49c5-9c87-8670fe74f04d_\u0438\u043C\u0430\u0433\u0438\u043D\u0430.png"
   }
 ]

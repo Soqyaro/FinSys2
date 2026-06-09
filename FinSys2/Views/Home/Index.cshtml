@@ -20,7 +20,7 @@
                     <div class="mb-3">
                         <input type="number" step="0.01" name="amount" class="form-control border-sky" placeholder="Сумма ₽" required>
                     </div>
-    
+
                     <div class="mb-3">
                         <select id="categorySelect" class="form-select border-sky" onchange="checkOtherCategory()">
                         </select>
@@ -38,7 +38,6 @@
                     <button type="submit" class="btn btn-sky w-100 fw-bold">Добавить</button>
                 </form>
 
-                
                 <form asp-action="ClearAllData" method="post" onsubmit="return confirm('Очистить всю историю?')" class="mt-3">
                     <button type="submit" class="btn btn-outline-danger btn-sm w-100 border-0">🗑 Быстрая очистка истории</button>
                 </form>
@@ -79,6 +78,46 @@
             <canvas id="lineChart" style="max-height: 250px;"></canvas>
         </div>
 
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card p-3 shadow-sm border-0 bg-light">
+                    <form method="get" asp-action="Index" class="d-flex align-items-end flex-wrap gap-2">
+                        <div>
+                            <label class="form-label text-muted small mb-1">Месяц</label>
+                            <select name="month" class="form-select border-sky">
+                                <option value="0" selected="@(ViewBag.SelectedMonth == 0)">Все месяцы</option>
+                                <option value="1" selected="@(ViewBag.SelectedMonth == 1)">Январь</option>
+                                <option value="2" selected="@(ViewBag.SelectedMonth == 2)">Февраль</option>
+                                <option value="3" selected="@(ViewBag.SelectedMonth == 3)">Март</option>
+                                <option value="4" selected="@(ViewBag.SelectedMonth == 4)">Апрель</option>
+                                <option value="5" selected="@(ViewBag.SelectedMonth == 5)">Май</option>
+                                <option value="6" selected="@(ViewBag.SelectedMonth == 6)">Июнь</option>
+                                <option value="7" selected="@(ViewBag.SelectedMonth == 7)">Июль</option>
+                                <option value="8" selected="@(ViewBag.SelectedMonth == 8)">Август</option>
+                                <option value="9" selected="@(ViewBag.SelectedMonth == 9)">Сентябрь</option>
+                                <option value="10" selected="@(ViewBag.SelectedMonth == 10)">Октябрь</option>
+                                <option value="11" selected="@(ViewBag.SelectedMonth == 11)">Ноябрь</option>
+                                <option value="12" selected="@(ViewBag.SelectedMonth == 12)">Декабрь</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label text-muted small mb-1">Год</label>
+                            <select name="year" class="form-select border-sky">
+                                <option value="0" selected="@(ViewBag.SelectedYear == 0)">Все время</option>
+                                <option value="2024" selected="@(ViewBag.SelectedYear == 2024)">2024</option>
+                                <option value="2025" selected="@(ViewBag.SelectedYear == 2025)">2025</option>
+                                <option value="2026" selected="@(ViewBag.SelectedYear == 2026)">2026</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-sky fw-bold">Применить фильтр</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Сбросить</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-6">
                 <div class="card p-4 mb-4 shadow-sm border-0">
@@ -98,7 +137,7 @@
 
 @section Scripts {
     <script>
-        //логика выпадающих списков категорий
+        // Логика выпадающих списков динамических категорий
         const incomeCats = ["Зарплата", "Переводы", "Прибыль с бизнеса"];
         const expenseCats = ["Еда", "Здоровье", "Спорт", "Кинотеатр", "Видеоигры"];
 
@@ -112,8 +151,8 @@
                 select.innerHTML += `<option value="${cat}">${cat}</option>`;
             });
             select.innerHTML += `<option value="Other">Другая категория...</option>`;
-            
-            checkOtherCategory();//скрываем поле ввода, если не выбрано другая категория
+
+            checkOtherCategory(); // Скрываем или показываем поле ввода кастомной категории
         }
 
         function checkOtherCategory() {
@@ -122,13 +161,13 @@
             customBlock.style.display = select.value === "Other" ? "block" : "none";
         }
 
-        //проверка
+        // Проверка кастомных категорий перед отправкой формы
         document.getElementById('transForm').onsubmit = function(e) {
             const select = document.getElementById('categorySelect');
             const customInput = document.getElementById('customCategoryInput');
             const type = document.getElementById('typeSelect').value;
             const list = type === "Income" ? incomeCats : expenseCats;
-            
+
             let finalValue = select.value;
 
             if (select.value === "Other") {
@@ -137,7 +176,7 @@
                     alert("Введите название своей категории");
                     return false;
                 }
-                //проверка на дубликат
+                // Проверка на дубликат внутри массивов
                 if (list.some(c => c.toLowerCase() === val.toLowerCase())) {
                     document.getElementById('validationError').style.display = 'block';
                     return false;
@@ -148,13 +187,12 @@
             document.getElementById('finalCategory').value = finalValue;
         };
 
-        //иниц категорий при загрузке страницы
+        // Инициализация категорий при первичной загрузке страницы
         updateCategories();
 
+        // РЕНДЕРИНГ ГРАФИКОВ (Chart.js)
 
-        //грфики
-        
-        //линейный график
+        // Линейный график динамики накоплений
         new Chart(document.getElementById('lineChart'), {
             type: 'line',
             data: {
@@ -171,12 +209,13 @@
             options: { scales: { y: { beginAtZero: true } } }
         });
 
+        // Настройки для круговых диаграмм
         const pieOptions = {
             plugins: { legend: { position: 'bottom' } },
             cutout: '65%'
         };
 
-        //круговой график расходов
+        // Круговой график расходов
         new Chart(document.getElementById('expenseChart'), {
             type: 'doughnut',
             data: {
@@ -189,7 +228,7 @@
             options: pieOptions
         });
 
-        //круговой график ДОХОДОВ
+        // Круговой график доходов
         new Chart(document.getElementById('incomeChart'), {
             type: 'doughnut',
             data: {
